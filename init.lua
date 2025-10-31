@@ -1,7 +1,7 @@
 -- TODO:
--- native lsp configuration
--- dont organize import on save
 
+-- ][Basic Keymaps][
+--
 -- this section describes key mappings and options
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
@@ -200,5 +200,6 @@ require('lazy').setup({
 
 vim.lsp.enable 'ruff'
 vim.lsp.enable 'pyright'
+vim.lsp.enable 'copilot'
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

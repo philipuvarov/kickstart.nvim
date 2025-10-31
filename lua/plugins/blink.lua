@@ -76,7 +76,5 @@ return { -- Autocompletion
       enabled = true,
       window = { border = 'single' },
     },
-
-
   },
 }

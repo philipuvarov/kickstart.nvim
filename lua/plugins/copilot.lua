@@ -1,24 +1,24 @@
 return {
-  'zbirenbaum/copilot.lua',
-  cmd = 'Copilot',
-  event = 'InsertEnter',
-  opts = {
-    suggestion = {
-      enabled = false, -- Disable inline suggestions (we'll use blink.cmp)
-    },
-    panel = {
-      enabled = false, -- Disable panel (we'll use blink.cmp)
-    },
-    filetypes = {
-      yaml = false,
-      markdown = false,
-      help = false,
-      gitcommit = false,
-      gitrebase = false,
-      hgcommit = false,
-      svn = false,
-      cvs = false,
-      ['.'] = false,
-    },
-  },
+  -- 'zbirenbaum/copilot.lua',
+  -- cmd = 'Copilot',
+  -- event = 'InsertEnter',
+  -- opts = {
+  --   suggestion = {
+  --     enabled = false, -- Disable inline suggestions (we'll use blink.cmp)
+  --   },
+  --   panel = {
+  --     enabled = false, -- Disable panel (we'll use blink.cmp)
+  --   },
+  --   filetypes = {
+  --     yaml = false,
+  --     markdown = false,
+  --     help = false,
+  --     gitcommit = false,
+  --     gitrebase = false,
+  --     hgcommit = false,
+  --     svn = false,
+  --     cvs = false,
+  --     ['.'] = false,
+  --   },
+  -- },
 }
