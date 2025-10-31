@@ -59,7 +59,7 @@ return {
 
           -- Document highlight
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.supports_method('textDocument/documentHighlight') then
+          if client and client.supports_method 'textDocument/documentHighlight' then
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
               buffer = event.buf,
@@ -83,7 +83,7 @@ return {
           end
 
           -- Inlay hints toggle
-          if client and client.supports_method('textDocument/inlayHint') then
+          if client and client.supports_method 'textDocument/inlayHint' then
             map('<leader>th', function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
             end, 'Toggle Inlay Hints')
@@ -95,11 +95,7 @@ return {
       -- By default, Neovim doesn't support everything that is in the LSP specification.
       -- When you add blink.cmp, Neovim now has *more* capabilities.
       -- So, we create new capabilities with blink.cmp, and then broadcast that to the servers.
-      local capabilities = vim.tbl_deep_extend(
-        'force',
-        vim.lsp.protocol.make_client_capabilities(),
-        require('blink.cmp').get_lsp_capabilities()
-      )
+      local capabilities = vim.tbl_deep_extend('force', vim.lsp.protocol.make_client_capabilities(), require('blink.cmp').get_lsp_capabilities())
 
       -- Add file operations capabilities
       capabilities.workspace = capabilities.workspace or {}
@@ -136,6 +132,7 @@ return {
             },
           },
         },
+        -- GitHub Copilot LSP (required for sidekick.nvim)
         -- Add your other LSP servers here
         -- ts_ls = {},
         -- rust_analyzer = {},

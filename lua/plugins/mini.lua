@@ -35,5 +35,17 @@ return { -- Collection of various small independent plugins/modules
     require('mini.pairs').setup()
     require('mini.indentscope').setup()
     require('mini.bufremove').setup()
+    MiniBufremove.delete()
+
+    -- File explorer
+    require('mini.files').setup {
+      mappings = {
+        go_in = '<Right>',
+        go_out = '<Left>',
+        reset = '<BS>',
+        reveal_cwd = '@',
+        synchronize = '-',
+      },
+    }
   end,
 }
