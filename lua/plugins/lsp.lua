@@ -132,27 +132,27 @@ return {
             },
           },
         },
-        -- Python: Type checking and completion
-        pyright = {
-          settings = {
-            python = {
-              analysis = {
-                autoSearchPaths = true,
-                diagnosticMode = 'workspace',
-                useLibraryCodeForTypes = true,
-                typeCheckingMode = 'basic',
-              },
-            },
-          },
-        },
-        -- Python: Linting with ruff
-        ruff_lsp = {
-          init_options = {
-            settings = {
-              -- Ruff language server settings go here
-            },
-          },
-        },
+        -- -- Python: Type checking and completion
+        -- pyright = {
+        --   settings = {
+        --     python = {
+        --       analysis = {
+        --         autoSearchPaths = true,
+        --         diagnosticMode = 'workspace',
+        --         useLibraryCodeForTypes = true,
+        --         typeCheckingMode = 'basic',
+        --       },
+        --     },
+        --   },
+        -- },
+        -- -- Python: Linting with ruff
+        -- ruff_lsp = {
+        --   init_options = {
+        --     settings = {
+        --       -- Ruff language server settings go here
+        --     },
+        --   },
+        -- },
         -- GitHub Copilot LSP (required for sidekick.nvim)
         -- Add your other LSP servers here
         -- ts_ls = {},
@@ -163,7 +163,6 @@ return {
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
-        'ruff', -- Python linter and formatter
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 

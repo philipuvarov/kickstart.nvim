@@ -33,9 +33,8 @@ return { -- Collection of various small independent plugins/modules
 
     require('mini.animate').setup()
     require('mini.pairs').setup()
-    require('mini.indentscope').setup()
+    -- require('mini.indentscope').setup()
     require('mini.bufremove').setup()
-    MiniBufremove.delete()
 
     -- File explorer
     require('mini.files').setup {
