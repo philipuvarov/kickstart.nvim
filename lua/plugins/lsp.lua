@@ -42,11 +42,7 @@ return {
           end
 
           -- LSP Keymaps
-          map('gd', vim.lsp.buf.definition, 'Goto Definition')
-          map('gr', vim.lsp.buf.references, 'Goto References')
-          map('gI', vim.lsp.buf.implementation, 'Goto Implementation')
-          map('gy', vim.lsp.buf.type_definition, 'Goto Type Definition')
-          map('gD', vim.lsp.buf.declaration, 'Goto Declaration')
+          -- { "gr", "<cmd>FzfLua lsp_references      jump1=true ignore_current_line=true<cr>", desc = "References", nowait = true },
           map('K', vim.lsp.buf.hover, 'Hover Documentation')
           map('gK', vim.lsp.buf.signature_help, 'Signature Help')
           map('<c-k>', vim.lsp.buf.signature_help, 'Signature Help', 'i')
