@@ -1,44 +1,11 @@
-return { -- Autocompletion
+return {
   'saghen/blink.cmp',
-  event = 'VimEnter',
+  -- optional: provides snippets for the snippet source
+  dependencies = { 'rafamadriz/friendly-snippets', 'fang2hou/blink-copilot' },
   version = '1.*',
-  dependencies = {
-    -- Snippet Engine
-    {
-      'L3MON4D3/LuaSnip',
-      version = '2.*',
-      build = (function()
-        -- Build Step is needed for regex support in snippets.
-        -- This step is not supported in many windows environments.
-        -- Remove the below condition to re-enable on windows.
-        if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
-          return
-        end
-        return 'make install_jsregexp'
-      end)(),
-      dependencies = {
-        -- `friendly-snippets` contains a variety of premade snippets.
-        --    See the README about individual language/framework/plugin snippets:
-        --    https://github.com/rafamadriz/friendly-snippets
-        {
-          'rafamadriz/friendly-snippets',
-          config = function()
-            require('luasnip.loaders.from_vscode').lazy_load()
-          end,
-        },
-      },
-      opts = {},
-    },
-    'folke/lazydev.nvim',
-    'fang2hou/blink-copilot',
-  },
-  --- @module 'blink.cmp'
-  --- @type blink.cmp.Config
   opts = {
-    keymap = {
-      preset = 'super-tab',
-    },
-
+    keymap = { preset = 'super-tab' },
+    -- (Default) Only show the documentation popup when manually triggered
     completion = {
       menu = { border = 'single' },
       documentation = {
@@ -47,9 +14,8 @@ return { -- Autocompletion
         auto_show_delay_ms = 500,
       },
     },
-
     sources = {
-      default = { 'lsp', 'path', 'snippets', 'copilot', 'lazydev', 'buffer' },
+      default = { 'lsp', 'path', 'snippets', 'buffer', 'copilot' },
       providers = {
         lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
         copilot = {
@@ -60,21 +26,81 @@ return { -- Autocompletion
         },
       },
     },
-
-    snippets = { preset = 'luasnip' },
-
-    -- Blink.cmp includes an optional, recommended rust fuzzy matcher,
-    -- which automatically downloads a prebuilt binary when enabled.
-    --
-    -- By default, we use the Lua implementation instead, but you may enable
-    -- the rust implementation via `'prefer_rust_with_warning'`
-    --
-    -- See :h blink-cmp-config-fuzzy for more information
-    fuzzy = { implementation = 'lua' },
-    -- Shows a signature help window while you type arguments for a function
-    signature = {
-      enabled = true,
-      window = { border = 'single' },
-    },
   },
+  opts_extend = { 'sources.default' },
 }
+
+-- return { -- Autocompletion
+--   'saghen/blink.cmp',
+--   event = 'VimEnter',
+--   dependencies = {
+--     -- Snippet Engine
+--     -- {
+--     --   'L3MON4D3/LuaSnip',
+--     --   version = '2.*',
+--     --   build = (function()
+--     --     -- Build Step is needed for regex support in snippets.
+--     --     -- This step is not supported in many windows environments.
+--     --     -- Remove the below condition to re-enable on windows.
+--     --     if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
+--     --       return
+--     --     end
+--     --     return 'make install_jsregexp'
+--     --   end)(),
+--     --   dependencies = {
+--     --     {
+--     --       'rafamadriz/friendly-snippets',
+--     --       config = function()
+--     --         require('luasnip.loaders.from_vscode').lazy_load()
+--     --       end,
+--     --     },
+--     --   },
+--     --   opts = {},
+--     -- },
+--     'folke/lazydev.nvim',
+--     'fang2hou/blink-copilot',
+--   },
+--   --- @module 'blink.cmp'
+--   --- @type blink.cmp.Config
+--   opts = {
+--     keymap = {
+--       preset = 'super-tab',
+--     },
+--     completion = {
+--       menu = { border = 'single' },
+--       documentation = {
+--         window = { border = 'single' },
+--         auto_show = true,
+--         auto_show_delay_ms = 500,
+--       },
+--     },
+--     sources = {
+--       default = { 'lsp', 'path', 'snippets', 'copilot', 'lazydev', 'buffer' },
+--       providers = {
+--         lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+--         copilot = {
+--           name = 'copilot',
+--           module = 'blink-copilot',
+--           score_offset = 100,
+--           async = true,
+--         },
+--       },
+--     },
+--
+--     snippets = { preset = 'luasnip' },
+--
+--     -- Blink.cmp includes an optional, recommended rust fuzzy matcher,
+--     -- which automatically downloads a prebuilt binary when enabled.
+--     --
+--     -- By default, we use the Lua implementation instead, but you may enable
+--     -- the rust implementation via `'prefer_rust_with_warning'`
+--     --
+--     -- See :h blink-cmp-config-fuzzy for more information
+--     fuzzy = { implementation = 'lua' },
+--     -- Shows a signature help window while you type arguments for a function
+--     signature = {
+--       enabled = true,
+--       window = { border = 'single' },
+--     },
+--   },
+-- }

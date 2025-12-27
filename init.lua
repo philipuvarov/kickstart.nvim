@@ -1,14 +1,13 @@
 -- TODO:
 
 -- ][Basic Keymaps][
---
--- this section describes key mappings and options
+vim.opt.laststatus = 0
+vim.opt.cmdheight = 0
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
 vim.o.number = true
 vim.o.mouse = 'a'
-
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
 
@@ -164,14 +163,13 @@ require('lazy').setup({
   require 'plugins.treesitter',
   require 'plugins.gitsigns',
   require 'plugins.conform',
-  require 'plugins.copilot',
+  -- require 'plugins.copilot',
   require 'plugins.ai',
   require 'plugins.colorscheme',
 }, {})
 
 vim.lsp.enable 'ruff'
-vim.lsp.enable 'pyright'
-vim.lsp.enable 'copilot'
+vim.lsp.enable 'basedpyright'
 vim.lsp.enable 'go'
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
