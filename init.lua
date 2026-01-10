@@ -140,7 +140,23 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     error('Error cloning lazy.nvim:\n' .. out)
   end
 end
+vim.api.nvim_create_autocmd('BufWritePost', {
+  pattern = {
+    vim.fn.expand '~' .. '/projects/notes/**/*',
+    vim.fn.expand '~' .. '/Projects/notes/**/*',
+  },
+  callback = function()
+    local dir = vim.fn.expand '%:p:h'
+    while dir ~= '/' and vim.fn.isdirectory(dir .. '/.git') == 0 do
+      dir = vim.fn.fnamemodify(dir, ':h')
+    end
 
+    vim.fn.jobstart(
+      { 'sh', '-c', string.format("cd %s && git add -A && git commit -m 'auto: %s' && git push", dir, os.date '%Y-%m-%d %H:%M:%S') },
+      { detach = true }
+    )
+  end,
+})
 ---@type vim.Option
 local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
@@ -163,7 +179,7 @@ require('lazy').setup({
   require 'plugins.treesitter',
   require 'plugins.gitsigns',
   require 'plugins.conform',
-  -- require 'plugins.copilot',
+  require 'plugins.copilot',
   require 'plugins.ai',
   require 'plugins.colorscheme',
 }, {})
@@ -171,5 +187,6 @@ require('lazy').setup({
 vim.lsp.enable 'ruff'
 vim.lsp.enable 'basedpyright'
 vim.lsp.enable 'go'
+vim.lsp.enable 'gdscript'
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
