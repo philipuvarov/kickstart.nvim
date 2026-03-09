@@ -191,8 +191,6 @@ require('lazy').setup({
   require 'plugins.treesitter',
   require 'plugins.gitsigns',
   require 'plugins.conform',
-  require 'plugins.copilot',
-  require 'plugins.ai',
   require 'plugins.colorscheme',
 }, {})
 
