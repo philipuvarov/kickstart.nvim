@@ -1,7 +1,7 @@
 return {
   'saghen/blink.cmp',
   -- optional: provides snippets for the snippet source
-  dependencies = { 'rafamadriz/friendly-snippets', 'fang2hou/blink-copilot' },
+  dependencies = { 'rafamadriz/friendly-snippets' },
   version = '1.*',
   opts = {
     keymap = { preset = 'super-tab' },
@@ -15,15 +15,9 @@ return {
       },
     },
     sources = {
-      default = { 'lsp', 'path', 'snippets', 'buffer', 'copilot' },
+      default = { 'lsp', 'path', 'snippets', 'buffer' },
       providers = {
         lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
-        copilot = {
-          name = 'copilot',
-          module = 'blink-copilot',
-          score_offset = 100,
-          async = true,
-        },
       },
     },
   },

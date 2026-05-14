@@ -20,6 +20,7 @@ vim.o.breakindent = true
 
 -- Save undofile history
 vim.o.undofile = true
+vim.o.swapfile = false
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.o.ignorecase = true
@@ -69,7 +70,51 @@ vim.o.confirm = true
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+vim.keymap.set('n', '<F5>', ':w<CR>:split | terminal LOG_INCLUDE_TRACEBACK=True PYTHONPATH=. python3 %<CR>', {})
+local terminal = { job_id = nil, buf = nil, win = nil }
 
+function terminal.run(cmd)
+  terminal.kill()
+  vim.cmd 'w'
+  vim.cmd('split | terminal ' .. cmd)
+  terminal.job_id = vim.b.terminal_job_id
+  terminal.buf = vim.api.nvim_get_current_buf()
+  terminal.win = vim.api.nvim_get_current_win()
+end
+
+function terminal.kill()
+  if terminal.job_id then
+    pcall(vim.fn.jobstop, terminal.job_id)
+    terminal.job_id = nil
+  end
+  if terminal.win and vim.api.nvim_win_is_valid(terminal.win) then
+    pcall(vim.api.nvim_win_close, terminal.win, true)
+  end
+  terminal.buf = nil
+  terminal.win = nil
+end
+
+vim.api.nvim_create_autocmd('BufDelete', {
+  callback = function(args)
+    if args.buf == terminal.buf then
+      terminal.kill()
+    end
+  end,
+})
+
+vim.keymap.set('n', '<F5>', function()
+  terminal.run 'LOG_INCLUDE_TRACEBACK=True PYTHONPATH=. python3 %'
+end, {})
+-- local last_term_job = nil
+-- vim.keymap.set('n', '<F5>', function()
+--   if last_term_job then
+--     pcall(vim.fn.jobstop, last_term_job)
+--     last_term_job = nil
+--   end
+--   vim.cmd 'w'
+--   vim.cmd 'split | terminal LOG_INCLUDE_TRACEBACK=True PYTHONPATH=. python3 %'
+--   last_term_job = vim.b.terminal_job_id
+-- end, {})
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>cq', vim.diagnostic.setloclist, { desc = '[C]ode Open diagnostic [Q]uickfix list' })
 
@@ -180,7 +225,7 @@ require('lazy').setup({
   require 'plugins.fzf',
   require 'plugins.whichkey',
   require 'plugins.lazydev',
-  require 'plugins.blink',
+  -- require 'plugins.blink',
   require 'plugins.todo',
   require 'plugins.mini',
   require 'plugins.miniicons',
@@ -191,14 +236,12 @@ require('lazy').setup({
   require 'plugins.treesitter',
   require 'plugins.gitsigns',
   require 'plugins.conform',
-  require 'plugins.copilot',
-  require 'plugins.ai',
   require 'plugins.colorscheme',
 }, {})
 
 vim.lsp.enable 'ruff'
-vim.lsp.enable 'basedpyright'
-vim.lsp.enable 'go'
+vim.lsp.enable 'ty'
+vim.lsp.enable 'gopls'
 vim.lsp.enable 'gdscript'
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
