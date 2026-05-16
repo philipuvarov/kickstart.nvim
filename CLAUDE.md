@@ -21,18 +21,19 @@ This configuration started from kickstart.nvim and is being gradually refactored
 ├── init.lua                 # Main configuration file with core settings
 ├── lua/
 │   ├── plugins/            # Custom plugin configurations (actively used)
+│   │   ├── ai.lua          # opencode integration
+│   │   ├── bufline.lua     # Buffer line
+│   │   ├── conform.lua     # Formatting
+│   │   ├── colorscheme.lua # Colorscheme
+│   │   ├── gitsigns.lua    # Git signs
 │   │   ├── lsp.lua         # LSP configuration with Mason
 │   │   ├── mini.lua        # mini.nvim modules
-│   │   ├── blink.lua       # Completion engine
 │   │   ├── fzf.lua         # Fuzzy finder
 │   │   ├── trouble.lua     # Diagnostics UI
 │   │   ├── whichkey.lua    # Keybind helper
-│   │   ├── todo.lua        # Todo comments
 │   │   ├── lazydev.lua     # Lua development
-│   │   ├── miniicons.lua   # Icon support
-│   │   └── bufline.lua     # Buffer line
-│   ├── kickstart/          # Original kickstart files (mostly unused)
-│   └── custom/             # Custom code (legacy)
+│   │   └── treesitter.lua  # Syntax highlighting
+│   └── kickstart/          # Legacy health helper
 └── CLAUDE.md               # This file
 ```
 
@@ -44,27 +45,26 @@ This configuration started from kickstart.nvim and is being gradually refactored
 |--------|---------|-------|
 | `neovim/nvim-lspconfig` | LSP configuration | See `lua/plugins/lsp.lua` |
 | `mason-org/mason.nvim` | LSP/tool installer | Auto-installs LSP servers |
-| `saghen/blink.cmp` | Completion engine | Uses LuaSnip for snippets |
-| `nvim-treesitter/nvim-treesitter` | Syntax highlighting | In `init.lua` |
+| `nvim-treesitter/nvim-treesitter` | Syntax highlighting | See `lua/plugins/treesitter.lua` |
 
 ### UI & Navigation
 
 | Plugin | Purpose | Notes |
 |--------|---------|-------|
 | `nvim-mini/mini.nvim` | Multiple small modules | See mini.nvim section below |
+| `akinsho/bufferline.nvim` | Buffer line | Buffer navigation and pinning |
 | `ibhagwan/fzf-lua` | Fuzzy finder | Alternative to Telescope |
 | `folke/trouble.nvim` | Diagnostics UI | Better diagnostic viewing |
 | `folke/which-key.nvim` | Keybind hints | Helix preset |
-| `folke/tokyonight.nvim` | Colorscheme | tokyonight-night variant |
+| `baliestri/aura-theme` | Colorscheme | aura-dark variant |
 
 ### Development Tools
 
 | Plugin | Purpose | Notes |
 |--------|---------|-------|
 | `stevearc/conform.nvim` | Formatting | Auto-format on save |
-| `folke/todo-comments.nvim` | Todo highlights | Highlights TODO, FIXME, etc. |
 | `folke/lazydev.nvim` | Lua development | Better Lua LSP for Neovim |
-| `lewis6991/gitsigns.nvim` | Git signs | In `init.lua` |
+| `lewis6991/gitsigns.nvim` | Git signs | See `lua/plugins/gitsigns.lua` |
 
 ### mini.nvim Modules
 
@@ -72,10 +72,9 @@ The configuration uses several mini.nvim modules (all in `lua/plugins/mini.lua`)
 
 - `mini.ai` - Better text objects (around/inside)
 - `mini.surround` - Add/delete/replace surroundings
-- `mini.statusline` - Simple statusline
+- `mini.icons` - Icon support
 - `mini.animate` - Smooth animations
 - `mini.pairs` - Auto-pair brackets
-- `mini.indentscope` - Indent scope visualization
 - `mini.bufremove` - Better buffer deletion
 - `mini.files` - File explorer (toggle with `<leader>e`)
 
@@ -126,7 +125,6 @@ Key groups (defined in which-key):
 
 LSP is configured in `lua/plugins/lsp.lua` with:
 - Mason for automatic installation
-- blink.cmp for completion capabilities
 - Standard LSP keybindings (gd, gr, gI, K, etc.)
 - Custom diagnostic configuration
 - File operation capabilities for renaming
@@ -177,14 +175,14 @@ LSP configuration including:
 - LspAttach autocommand with keymaps
 - Diagnostic configuration
 - Server-specific settings (lua_ls, etc.)
-- Capabilities configuration with blink.cmp
+- File operation capabilities
 
 ### lua/plugins/mini.lua
 
 All mini.nvim module configurations:
-- Text objects, surround, statusline
+- Text objects, surround, icons
 - File explorer with `<leader>e` keymap
-- Pairs, indentscope, bufremove, animate
+- Pairs, bufremove, animate
 
 ## Common Tasks
 
@@ -268,7 +266,6 @@ Then use `i` to install servers.
 ## Future Improvements
 
 Ideas for expansion:
-- Git integration (lazygit or similar)
 - Debugging (nvim-dap)
 - More LSP servers as needed
 - Custom snippets

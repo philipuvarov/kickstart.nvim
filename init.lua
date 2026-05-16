@@ -8,7 +8,7 @@ vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
 vim.o.number = true
 vim.o.mouse = 'a'
--- Don't show the mode, since it's already in the status line
+-- Don't show the mode in the command area.
 vim.o.showmode = false
 
 -- Sync clipboard between OS and Neovim.
@@ -70,7 +70,6 @@ vim.o.confirm = true
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
-vim.keymap.set('n', '<F5>', ':w<CR>:split | terminal LOG_INCLUDE_TRACEBACK=True PYTHONPATH=. python3 %<CR>', {})
 local terminal = { job_id = nil, buf = nil, win = nil }
 
 function terminal.run(cmd)
@@ -125,6 +124,52 @@ vim.keymap.set('n', '<leader>cq', vim.diagnostic.setloclist, { desc = '[C]ode Op
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+vim.keymap.set('n', '<leader>gg', function()
+  vim.cmd 'tabnew'
+  local lazygit_tab = vim.api.nvim_get_current_tabpage()
+  local lazygit_buf = vim.api.nvim_get_current_buf()
+
+  local function close_lazygit_tab()
+    vim.schedule(function()
+      if not vim.api.nvim_tabpage_is_valid(lazygit_tab) then
+        return
+      end
+
+      local current_tab = vim.api.nvim_get_current_tabpage()
+      if #vim.api.nvim_list_tabpages() > 1 then
+        vim.api.nvim_set_current_tabpage(lazygit_tab)
+        vim.cmd 'tabclose!'
+        if vim.api.nvim_tabpage_is_valid(current_tab) then
+          vim.api.nvim_set_current_tabpage(current_tab)
+        end
+      elseif vim.api.nvim_buf_is_valid(lazygit_buf) then
+        vim.cmd 'enew'
+        vim.api.nvim_buf_delete(lazygit_buf, { force = true })
+      end
+    end)
+  end
+
+  local job = vim.fn.jobstart({ 'lazygit' }, {
+    term = true,
+    on_exit = function()
+      close_lazygit_tab()
+    end,
+  })
+
+  if job <= 0 then
+    close_lazygit_tab()
+    vim.notify('Failed to start lazygit', vim.log.levels.ERROR)
+    return
+  end
+
+  vim.bo[lazygit_buf].buflisted = false
+  vim.bo[lazygit_buf].bufhidden = 'wipe'
+  vim.schedule(function()
+    if vim.api.nvim_buf_is_valid(lazygit_buf) then
+      vim.cmd 'startinsert'
+    end
+  end)
+end, { desc = 'LazyGit' })
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -143,8 +188,6 @@ local diagnostic_goto = function(next, severity)
   end
 end
 vim.keymap.set('n', '<leader>cd', vim.diagnostic.open_float, { desc = 'Line Diagnostics' })
-vim.keymap.set('n', ']d', diagnostic_goto(true), { desc = 'Next Diagnostic' })
-vim.keymap.set('n', '[d', diagnostic_goto(false), { desc = 'Prev Diagnostic' })
 vim.keymap.set('n', ']e', diagnostic_goto(true, 'ERROR'), { desc = 'Next Error' })
 vim.keymap.set('n', '[e', diagnostic_goto(false, 'ERROR'), { desc = 'Prev Error' })
 vim.keymap.set('n', ']w', diagnostic_goto(true, 'WARN'), { desc = 'Next Warning' })
@@ -226,14 +269,10 @@ require('lazy').setup({
   require 'plugins.fzf',
   require 'plugins.whichkey',
   require 'plugins.lazydev',
-  -- require 'plugins.blink',
-  require 'plugins.todo',
   require 'plugins.mini',
-  require 'plugins.miniicons',
   require 'plugins.bufline',
   require 'plugins.trouble',
   require 'plugins.lsp',
-  require 'plugins.lazygit',
   require 'plugins.treesitter',
   require 'plugins.gitsigns',
   require 'plugins.conform',
