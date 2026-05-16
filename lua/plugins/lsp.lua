@@ -51,9 +51,16 @@ return {
           -- map('<leader>cc', vim.lsp.codelens.run, 'Run Codelens', { 'n', 'x' })
           -- map('<leader>cC', vim.lsp.codelens.refresh, 'Refresh & Display Codelens')
 
-          -- Document highlight
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.supports_method 'textDocument/documentHighlight' then
+
+          -- Built-in LSP completion
+          if client and client:supports_method 'textDocument/completion' then
+            vim.lsp.completion.enable(true, client.id, event.buf, { autotrigger = true })
+            map('<c-space>', vim.lsp.completion.get, 'Trigger Completion', 'i')
+          end
+
+          -- Document highlight
+          if client and client:supports_method 'textDocument/documentHighlight' then
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
               buffer = event.buf,
@@ -77,7 +84,7 @@ return {
           end
 
           -- Inlay hints toggle
-          if client and client.supports_method 'textDocument/inlayHint' then
+          if client and client:supports_method 'textDocument/inlayHint' then
             map('<leader>th', function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
             end, 'Toggle Inlay Hints')

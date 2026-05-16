@@ -19,9 +19,9 @@ return {
     lazy = false,
     priority = 1000,
     opts = {
-      transparent = true,
+      transparent = false,
       styles = {
-        comments = { italic = false },
+        comments = { italic = true },
       },
     },
   },
@@ -30,8 +30,8 @@ return {
     lazy = false,
     priority = 1000,
     opts = {
-      transparent = true,
-      italic_comments = false,
+      transparent = false,
+      italic_comments = true,
     },
   },
   {

@@ -10,6 +10,9 @@ vim.o.number = true
 vim.o.mouse = 'a'
 -- Don't show the mode in the command area.
 vim.o.showmode = false
+vim.o.autocomplete = true
+vim.o.complete = 'o,.,w,b,u,t'
+vim.opt.completeopt = { 'menuone', 'noselect', 'popup', 'fuzzy' }
 
 -- Sync clipboard between OS and Neovim.
 vim.schedule(function()
@@ -178,6 +181,12 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 vim.keymap.set('i', '<C-s>', '<Esc>:w<CR>', { desc = 'Save file and exit insert mode' })
+vim.keymap.set('i', '<Tab>', function()
+  return vim.fn.pumvisible() == 1 and '<C-n>' or '<Tab>'
+end, { expr = true, desc = 'Next completion item' })
+vim.keymap.set('i', '<S-Tab>', function()
+  return vim.fn.pumvisible() == 1 and '<C-p>' or '<S-Tab>'
+end, { expr = true, desc = 'Previous completion item' })
 local diagnostic_goto = function(next, severity)
   return function()
     vim.diagnostic.jump {
