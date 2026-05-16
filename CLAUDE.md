@@ -142,7 +142,35 @@ servers = {
 }
 ```
 
-### 5. NO LazyVim, NO Snacks
+### 5. Tree-sitter Configuration
+
+Tree-sitter is configured in `lua/plugins/treesitter.lua`.
+
+This config uses the current `nvim-treesitter` `main` branch API. Do not use the
+old module-style options such as `ensure_installed`, `highlight.enable`,
+`auto_install`, or `indent.enable`; those were for the older branch and do not
+start highlighting on the current plugin version.
+
+Current pattern:
+- Keep `nvim-treesitter` eager-loaded with `lazy = false`.
+- Maintain an explicit `parsers` list in `lua/plugins/treesitter.lua`.
+- Install missing parsers with `require('nvim-treesitter').install(missing)`.
+- Start highlighting manually from a `FileType` autocommand with
+  `vim.treesitter.start()`.
+- Set Tree-sitter indentation with
+  `vim.bo[event.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"`.
+
+Go highlighting depends on the Go parser family being present and enabled:
+`go`, `gomod`, `gosum`, and `gowork`. If Go syntax looks flat or basic, check
+that these parsers are installed and that a Go buffer has an active Tree-sitter
+highlighter:
+
+```vim
+:checkhealth nvim-treesitter
+:lua print(vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()] ~= nil)
+```
+
+### 6. NO LazyVim, NO Snacks
 
 **Important**: This config does NOT use:
 - LazyVim distribution (it's kickstart-based)
@@ -165,7 +193,6 @@ Contains:
 - Autocommands (yank highlight)
 - Lazy.nvim bootstrap
 - Plugin loading via `require 'plugins.*'`
-- Inline plugin specs (gitsigns, conform, colorscheme, treesitter)
 
 ### lua/plugins/lsp.lua
 
