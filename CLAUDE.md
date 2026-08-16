@@ -56,7 +56,8 @@ This configuration started from kickstart.nvim and is being gradually refactored
 | `ibhagwan/fzf-lua` | Fuzzy finder | Alternative to Telescope |
 | `folke/trouble.nvim` | Diagnostics UI | Better diagnostic viewing |
 | `folke/which-key.nvim` | Keybind hints | Helix preset |
-| `baliestri/aura-theme` | Colorscheme | aura-dark variant |
+| `scottmckendry/cyberdream.nvim` | Colorscheme | Default Cyberdream theme |
+| `baliestri/aura-theme` | Colorscheme | Available alternate theme |
 
 ### Development Tools
 

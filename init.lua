@@ -10,9 +10,12 @@ vim.o.number = true
 vim.o.mouse = 'a'
 -- Don't show the mode in the command area.
 vim.o.showmode = false
+-- Keep automatic completion small and local. Use <C-Space> for full LSP completion.
 vim.o.autocomplete = true
-vim.o.complete = 'o,.,w,b,u,t'
-vim.opt.completeopt = { 'menuone', 'noselect', 'popup', 'fuzzy' }
+vim.o.autocompletedelay = 150
+vim.o.complete = '.^8,b^4'
+vim.o.pumheight = 10
+vim.opt.completeopt = { 'menuone', 'noselect', 'popup' }
 
 -- Sync clipboard between OS and Neovim.
 vim.schedule(function()
@@ -292,5 +295,6 @@ vim.lsp.enable 'ruff'
 vim.lsp.enable 'ty'
 vim.lsp.enable 'gopls'
 vim.lsp.enable 'gdscript'
+vim.lsp.enable 'zls'
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
