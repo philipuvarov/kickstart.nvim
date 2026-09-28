@@ -21,7 +21,6 @@ This configuration started from kickstart.nvim and is being gradually refactored
 ├── init.lua                 # Main configuration file with core settings
 ├── lua/
 │   ├── plugins/            # Custom plugin configurations (actively used)
-│   │   ├── ai.lua          # opencode integration
 │   │   ├── bufline.lua     # Buffer line
 │   │   ├── conform.lua     # Formatting
 │   │   ├── colorscheme.lua # Colorscheme
